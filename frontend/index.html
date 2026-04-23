@@ -6,20 +6,20 @@
   <title>Student Marks Checker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f3efe7;
-      --panel: #fff9ee;
-      --ink: #18212f;
-      --muted: #5e6878;
-      --primary: #0b6f5f;
-      --primary-dark: #07594c;
-      --accent: #ef6c3f;
-      --good: #1f9d61;
-      --bad: #d64545;
-      --stroke: #d7ccbd;
-      --shadow: 0 20px 40px rgba(20, 32, 50, 0.12);
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --text: #1a2233;
+      --muted: #586179;
+      --line: #d9dfec;
+      --primary: #0a6b57;
+      --primary-strong: #085847;
+      --warn: #cb4235;
+      --ok: #117d4f;
+      --soft: #edf2fb;
+      --shadow: 0 12px 30px rgba(24, 33, 52, 0.1);
     }
 
     * {
@@ -30,366 +30,321 @@
 
     body {
       font-family: Manrope, 'Segoe UI', sans-serif;
-      color: var(--ink);
+      color: var(--text);
+      background: radial-gradient(circle at 10% 10%, #e7efff, transparent 35%), linear-gradient(180deg, #f8f9fd 0%, #edf2f9 100%);
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(239, 108, 63, 0.22), transparent 30%),
-        radial-gradient(circle at 90% 8%, rgba(11, 111, 95, 0.26), transparent 35%),
-        linear-gradient(180deg, #fdf7ea 0%, #f1ece2 100%);
-      padding: 2rem 1rem 3rem;
+      padding: 22px 14px 40px;
     }
 
-    .shell {
-      max-width: 1100px;
+    .app {
+      max-width: 1080px;
       margin: 0 auto;
       display: grid;
-      gap: 1rem;
-      animation: rise 520ms ease-out;
+      gap: 14px;
+    }
+
+    .hero,
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
     }
 
     .hero {
-      border: 1px solid var(--stroke);
-      border-radius: 1.3rem;
-      background: linear-gradient(120deg, #fff7e7 0%, #f9f5ec 100%);
-      box-shadow: var(--shadow);
-      padding: 1.2rem;
+      padding: 18px;
     }
 
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.6rem, 3vw, 2.3rem);
-      margin-bottom: 0.35rem;
-      letter-spacing: -0.03em;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      margin-bottom: 6px;
     }
 
     .hero p {
       color: var(--muted);
       font-size: 0.95rem;
+      line-height: 1.55;
     }
 
     .grid {
       display: grid;
-      gap: 1rem;
+      gap: 14px;
       grid-template-columns: repeat(12, minmax(0, 1fr));
     }
 
     .panel {
-      border: 1px solid var(--stroke);
-      background: var(--panel);
-      border-radius: 1rem;
-      box-shadow: var(--shadow);
-      padding: 1rem;
+      grid-column: span 12;
+      padding: 14px;
     }
 
     .panel h2 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.05rem;
-      margin-bottom: 0.85rem;
+      margin-bottom: 10px;
     }
 
-    .api-panel {
-      grid-column: span 12;
+    .hint {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-bottom: 8px;
     }
 
-    .stats-panel {
-      grid-column: span 12;
-    }
-
-    .form-panel {
-      grid-column: span 12;
-    }
-
-    .lookup-panel {
-      grid-column: span 12;
-    }
-
-    .table-panel {
-      grid-column: span 12;
-      overflow: hidden;
-    }
-
-    .field-row {
+    .row {
       display: grid;
-      gap: 0.75rem;
       grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 10px;
     }
 
     .field {
       grid-column: span 12;
-      display: flex;
-      flex-direction: column;
-      gap: 0.38rem;
     }
 
-    .field label {
-      font-size: 0.84rem;
-      color: var(--muted);
+    label {
+      display: block;
+      font-size: 0.82rem;
       font-weight: 700;
-      letter-spacing: 0.01em;
+      color: var(--muted);
+      margin-bottom: 5px;
     }
 
     input,
     select {
       width: 100%;
-      border: 1px solid #cbbda9;
-      border-radius: 0.75rem;
-      background: #fff;
-      color: var(--ink);
-      padding: 0.68rem 0.78rem;
-      font-size: 0.95rem;
+      border: 1px solid #cfd7e6;
+      border-radius: 10px;
+      padding: 10px 11px;
+      font-size: 0.92rem;
       outline: none;
-      transition: border-color 160ms ease;
+      background: #fff;
+      color: var(--text);
     }
 
     input:focus,
     select:focus {
-      border-color: var(--primary);
+      border-color: #6d8cd6;
     }
 
     .actions {
+      margin-top: 10px;
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
+      gap: 8px;
     }
 
     button {
       border: none;
       border-radius: 999px;
-      padding: 0.6rem 1rem;
-      font-size: 0.9rem;
-      font-weight: 800;
-      font-family: 'Space Grotesk', sans-serif;
-      letter-spacing: 0.02em;
+      padding: 9px 14px;
       cursor: pointer;
-      transition: transform 120ms ease, opacity 120ms ease, background-color 120ms ease;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      font-size: 0.84rem;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
+    .primary {
       background: var(--primary);
       color: #fff;
     }
 
-    .btn-primary:hover {
-      background: var(--primary-dark);
+    .primary:hover {
+      background: var(--primary-strong);
     }
 
-    .btn-secondary {
-      background: #ece5d8;
-      color: #2f3948;
+    .secondary {
+      background: #e9edf6;
+      color: #23304a;
     }
 
-    .btn-danger {
-      background: var(--bad);
+    .danger {
+      background: var(--warn);
       color: #fff;
     }
 
-    .stat-grid {
+    .stats {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.7rem;
+      gap: 10px;
     }
 
     .stat {
-      border: 1px solid var(--stroke);
-      background: #fff;
-      border-radius: 0.85rem;
-      padding: 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--soft);
+      padding: 10px;
     }
 
-    .stat .name {
-      font-size: 0.77rem;
-      font-weight: 700;
+    .stat-name {
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .stat .value {
-      margin-top: 0.35rem;
-      font-size: 1.35rem;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
       font-size: 0.75rem;
-      font-weight: 800;
-      padding: 0.22rem 0.55rem;
-      letter-spacing: 0.02em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
     }
 
-    .tag.good {
-      background: rgba(31, 157, 97, 0.12);
-      color: #0f6d3f;
-    }
-
-    .tag.bad {
-      background: rgba(214, 69, 69, 0.14);
-      color: #972626;
+    .stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      margin-top: 4px;
+      font-size: 1.35rem;
     }
 
     .status {
-      margin-top: 0.7rem;
-      border-radius: 0.75rem;
-      padding: 0.65rem 0.8rem;
-      font-size: 0.88rem;
       display: none;
+      margin-top: 10px;
       border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 0.85rem;
     }
 
     .status.show {
       display: block;
-      animation: rise 220ms ease-out;
     }
 
     .status.info {
-      color: #113b5f;
-      border-color: #99bbd4;
-      background: #e5f2fb;
+      background: #e8f1ff;
+      border-color: #aac6f8;
+      color: #224270;
     }
 
     .status.error {
-      color: #7f1d1d;
-      border-color: #dcb2b2;
-      background: #f9e8e8;
+      background: #faecea;
+      border-color: #e5bbb6;
+      color: #7c2b22;
     }
 
     .status.success {
-      color: #0e5f38;
-      border-color: #b7dbc7;
-      background: #e7f6ec;
+      background: #e6f6ee;
+      border-color: #b6ddc8;
+      color: #0f6440;
     }
 
-    .table-wrap {
+    .table-box {
       overflow: auto;
-      border-radius: 0.8rem;
-      border: 1px solid var(--stroke);
-      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
     }
 
     table {
       width: 100%;
       min-width: 720px;
       border-collapse: collapse;
+      background: #fff;
     }
 
     th,
     td {
-      padding: 0.7rem 0.75rem;
-      border-bottom: 1px solid #efe6d9;
+      padding: 10px;
+      border-bottom: 1px solid #ebeff7;
       text-align: left;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
 
     th {
-      font-size: 0.76rem;
+      background: #f5f8fe;
+      color: #4d5870;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--muted);
-      background: #f9f6ef;
       position: sticky;
       top: 0;
     }
 
-    tr:hover td {
-      background: #fff8ec;
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .badge.pass {
+      background: #daf2e5;
+      color: var(--ok);
+    }
+
+    .badge.fail {
+      background: #f8dedb;
+      color: #9d2f23;
     }
 
     .footer-note {
-      font-size: 0.82rem;
-      color: var(--muted);
       text-align: center;
-      margin-top: 0.2rem;
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-top: 2px;
     }
 
-    @media (min-width: 900px) {
-      .stats-panel {
+    .developer {
+      text-align: center;
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-top: 4px;
+      color: #21314f;
+    }
+
+    @media (min-width: 920px) {
+      .left {
         grid-column: span 4;
       }
 
-      .lookup-panel {
+      .right {
         grid-column: span 8;
       }
 
-      .form-panel {
-        grid-column: span 5;
-      }
-
-      .table-panel {
-        grid-column: span 7;
-      }
-
-      .field-half {
+      .half {
         grid-column: span 6;
       }
 
-      .field-third {
+      .third {
         grid-column: span 4;
-      }
-    }
-
-    @keyframes rise {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
       }
     }
   </style>
 </head>
 <body>
-  <main class="shell">
+  <main class="app">
     <header class="hero">
       <h1>Student Marks Checker</h1>
-      <p>Manage student records, calculate grades, and review pass or fail analytics from one dashboard.</p>
+      <p>Simple dashboard to add students, check grades, filter pass/fail, and manage records.</p>
     </header>
 
     <section class="grid">
-      <article class="panel api-panel">
-        <h2>API Configuration</h2>
-        <div class="field-row">
-          <div class="field field-half">
+      <article class="panel">
+        <h2>1) Connect Backend API</h2>
+        <p class="hint">First set your backend URL, then click health check.</p>
+        <div class="row">
+          <div class="field half">
             <label for="apiUrl">API Base URL</label>
-            <input id="apiUrl" type="url" placeholder="http://localhost:3000" />
+            <input id="apiUrl" type="url" placeholder="https://your-backend-url.com" />
           </div>
         </div>
         <div class="actions">
-          <button class="btn-primary" id="saveApiUrlBtn" type="button">Save API URL</button>
-          <button class="btn-secondary" id="healthBtn" type="button">Check API Health</button>
+          <button class="primary" id="saveApiUrlBtn" type="button">Save API URL</button>
+          <button class="secondary" id="healthBtn" type="button">Check API Health</button>
         </div>
         <div class="status" id="apiStatus"></div>
       </article>
 
-      <article class="panel stats-panel">
-        <h2>Performance Stats</h2>
-        <div class="stat-grid">
-          <div class="stat"><p class="name">Total</p><p class="value" id="totalStat">0</p></div>
-          <div class="stat"><p class="name">Passed</p><p class="value" id="passedStat">0</p></div>
-          <div class="stat"><p class="name">Failed</p><p class="value" id="failedStat">0</p></div>
-          <div class="stat"><p class="name">Average</p><p class="value" id="averageStat">0</p></div>
+      <article class="panel left">
+        <h2>2) Stats</h2>
+        <div class="stats">
+          <div class="stat"><p class="stat-name">Total</p><p class="stat-value" id="totalStat">0</p></div>
+          <div class="stat"><p class="stat-name">Passed</p><p class="stat-value" id="passedStat">0</p></div>
+          <div class="stat"><p class="stat-name">Failed</p><p class="stat-value" id="failedStat">0</p></div>
+          <div class="stat"><p class="stat-name">Average</p><p class="stat-value" id="averageStat">0</p></div>
         </div>
       </article>
 
-      <article class="panel lookup-panel">
-        <h2>Find Students</h2>
-        <div class="field-row">
-          <div class="field field-third">
-            <label for="searchInput">Name or Subject</label>
-            <input id="searchInput" type="text" placeholder="Search by name or subject" />
+      <article class="panel right">
+        <h2>3) Find Students</h2>
+        <div class="row">
+          <div class="field third">
+            <label for="searchInput">Search</label>
+            <input id="searchInput" type="text" placeholder="Name or subject" />
           </div>
-          <div class="field field-third">
+          <div class="field third">
             <label for="statusFilter">Status</label>
             <select id="statusFilter">
               <option value="all">All</option>
@@ -397,44 +352,45 @@
               <option value="fail">Fail</option>
             </select>
           </div>
-          <div class="field field-third">
+          <div class="field third">
             <label for="idLookup">Student ID</label>
-            <input id="idLookup" type="number" min="1" placeholder="Enter id" />
+            <input id="idLookup" type="number" min="1" placeholder="e.g. 1" />
           </div>
         </div>
         <div class="actions">
-          <button class="btn-primary" id="filterBtn" type="button">Apply Filters</button>
-          <button class="btn-secondary" id="lookupBtn" type="button">Find by ID</button>
-          <button class="btn-secondary" id="refreshBtn" type="button">Refresh All</button>
+          <button class="primary" id="filterBtn" type="button">Apply Filters</button>
+          <button class="secondary" id="lookupBtn" type="button">Find by ID</button>
+          <button class="secondary" id="refreshBtn" type="button">Refresh All</button>
         </div>
         <div class="status" id="lookupStatus"></div>
       </article>
 
-      <article class="panel form-panel">
-        <h2>Add Student</h2>
-        <div class="field-row">
+      <article class="panel left">
+        <h2>4) Add Student</h2>
+        <p class="hint">Enter details and click Add Student.</p>
+        <div class="row">
           <div class="field">
             <label for="fullName">Full Name</label>
-            <input id="fullName" type="text" placeholder="e.g. Hafizullah Khokhar" />
+            <input id="fullName" type="text" placeholder="e.g. Hafzullah Khokhar" />
           </div>
-          <div class="field field-half">
+          <div class="field half">
             <label for="subject">Subject</label>
             <input id="subject" type="text" placeholder="e.g. Computer Science" />
           </div>
-          <div class="field field-half">
+          <div class="field half">
             <label for="marks">Marks</label>
-            <input id="marks" type="number" min="0" max="100" placeholder="0 - 100" />
+            <input id="marks" type="number" min="0" max="100" placeholder="0 to 100" />
           </div>
         </div>
         <div class="actions">
-          <button class="btn-primary" id="createBtn" type="button">Add Student</button>
+          <button class="primary" id="createBtn" type="button">Add Student</button>
         </div>
         <div class="status" id="formStatus"></div>
       </article>
 
-      <article class="panel table-panel">
-        <h2>Student Records</h2>
-        <div class="table-wrap">
+      <article class="panel right">
+        <h2>5) Student Records</h2>
+        <div class="table-box">
           <table>
             <thead>
               <tr>
@@ -454,7 +410,8 @@
       </article>
     </section>
 
-    <p class="footer-note">Tip: for GitHub Pages, deploy backend on Render and set the API URL above.</p>
+    <p class="footer-note">Tip: set your backend URL once, then dashboard will remember it.</p>
+    <p class="developer">Developed by Hafzullah Khokhar</p>
   </main>
 
   <script>
@@ -471,7 +428,6 @@
     const passedStat = document.getElementById('passedStat');
     const failedStat = document.getElementById('failedStat');
     const averageStat = document.getElementById('averageStat');
-
     const studentsTableBody = document.getElementById('studentsTableBody');
 
     function getApiBaseUrl() {
@@ -498,8 +454,7 @@
     }
 
     async function apiRequest(path, options = {}) {
-      const baseUrl = getApiBaseUrl();
-      const response = await fetch(`${baseUrl}${path}`, {
+      const response = await fetch(`${getApiBaseUrl()}${path}`, {
         headers: {
           'Content-Type': 'application/json',
           ...(options.headers || {})
@@ -507,24 +462,25 @@
         ...options
       });
 
-      let payload = null;
+      let payload;
       try {
         payload = await response.json();
       } catch (error) {
-        payload = { success: false, error: 'Invalid JSON response from API.' };
+        payload = { error: 'Invalid JSON response from server.' };
       }
 
       if (!response.ok) {
-        const message = payload.errors?.join(' | ') || payload.error || `Request failed with status ${response.status}`;
+        const message = payload.errors?.join(' | ') || payload.error || `Request failed (${response.status})`;
         throw new Error(message);
       }
 
       return payload;
     }
 
-    function studentRowMarkup(student) {
-      const statusClass = student.passed ? 'good' : 'bad';
-      const statusText = student.passed ? 'Pass' : 'Fail';
+    function studentRow(student) {
+      const badgeClass = student.passed ? 'pass' : 'fail';
+      const badgeText = student.passed ? 'Pass' : 'Fail';
+
       return `
         <tr>
           <td>${student.id}</td>
@@ -532,10 +488,8 @@
           <td>${escapeHtml(student.subject)}</td>
           <td>${student.marks}</td>
           <td>${student.grade}</td>
-          <td><span class="tag ${statusClass}">${statusText}</span></td>
-          <td>
-            <button class="btn-danger" type="button" onclick="deleteStudent(${student.id})">Delete</button>
-          </td>
+          <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+          <td><button class="danger" type="button" onclick="deleteStudent(${student.id})">Delete</button></td>
         </tr>
       `;
     }
@@ -554,9 +508,9 @@
 
     async function loadStudents(query = '') {
       const payload = await apiRequest(`/api/students${query}`);
-      const rows = payload.data.map(studentRowMarkup).join('');
+      const rows = payload.data.map(studentRow).join('');
       studentsTableBody.innerHTML = rows || '<tr><td colspan="7">No students found.</td></tr>';
-      setStatus(tableStatus, 'info', `${payload.total} student record(s) loaded.`);
+      setStatus(tableStatus, 'info', `${payload.total} students loaded.`);
     }
 
     async function runHealthCheck() {
@@ -573,8 +527,7 @@
       clearStatus(formStatus);
       const fullName = document.getElementById('fullName').value.trim();
       const subject = document.getElementById('subject').value.trim();
-      const marksValue = document.getElementById('marks').value;
-      const marks = Number(marksValue);
+      const marks = Number(document.getElementById('marks').value);
 
       try {
         await apiRequest('/api/students', {
@@ -595,6 +548,7 @@
 
     async function applyFilters() {
       clearStatus(lookupStatus);
+
       const search = document.getElementById('searchInput').value.trim();
       const status = document.getElementById('statusFilter').value;
 
@@ -606,7 +560,7 @@
 
       try {
         await loadStudents(query);
-        setStatus(lookupStatus, 'success', 'Filters applied successfully.');
+        setStatus(lookupStatus, 'success', 'Filter applied.');
       } catch (error) {
         setStatus(lookupStatus, 'error', error.message);
       }
@@ -617,20 +571,20 @@
       const id = Number(document.getElementById('idLookup').value);
 
       if (!Number.isInteger(id) || id <= 0) {
-        setStatus(lookupStatus, 'error', 'Please enter a valid positive student id.');
+        setStatus(lookupStatus, 'error', 'Enter a valid positive student id.');
         return;
       }
 
       try {
         const payload = await apiRequest(`/api/students/${id}`);
-        studentsTableBody.innerHTML = studentRowMarkup(payload.data);
-        setStatus(lookupStatus, 'success', `Student ${payload.data.fullName} loaded.`);
+        studentsTableBody.innerHTML = studentRow(payload.data);
+        setStatus(lookupStatus, 'success', `Student ${payload.data.fullName} found.`);
       } catch (error) {
         setStatus(lookupStatus, 'error', error.message);
       }
     }
 
-    async function refreshDashboard() {
+    async function refreshAll() {
       clearStatus(lookupStatus);
       clearStatus(tableStatus);
       try {
@@ -667,208 +621,12 @@
     document.getElementById('createBtn').addEventListener('click', createStudent);
     document.getElementById('filterBtn').addEventListener('click', applyFilters);
     document.getElementById('lookupBtn').addEventListener('click', lookupById);
-    document.getElementById('refreshBtn').addEventListener('click', refreshDashboard);
+    document.getElementById('refreshBtn').addEventListener('click', refreshAll);
 
     apiUrlInput.value = getApiBaseUrl();
-    refreshDashboard();
+    refreshAll();
 
     window.deleteStudent = deleteStudent;
   </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Student Result Checker</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial; background: #f5f5f5; padding: 30px; }
-    .container { max-width: 600px; margin: 0 auto; }
-    h1 { color: #003366; margin-bottom: 25px; }
-    h2 { color: #0055A5; margin: 25px 0 15px; }
-    input, select { 
-      width: 100%; padding: 10px; margin: 8px 0; 
-      border: 1px solid #ddd; border-radius: 5px; font-size: 14px;
-    }
-    button { 
-      background: #0055A5; color: white; padding: 12px 25px; 
-      border: none; border-radius: 5px; cursor: pointer; margin: 5px 5px 5px 0;
-    }
-    button:hover { background: #003366; }
-    .result-box { 
-      margin-top: 15px; padding: 15px; border-radius: 5px; 
-      display: none; font-size: 14px; line-height: 1.6;
-    }
-    .success { background: #d4edda; border-left: 4px solid #28a745; }
-    .error   { background: #f8d7da; border-left: 4px solid #dc3545; }
-    .info    { background: #d1ecf1; border-left: 4px solid #17a2b8; }
-    pre { white-space: pre-wrap; font-family: monospace; }
-    .divider { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
-  </style>
-</head>
-<body>
-<div class="container">
-  <h1>Student Result Checker</h1>
-
-  <!-- SECTION 1: ID se result dekho -->
-  <h2>1. ID se Result Dekho</h2>
-  <input type="number" id="studentId" placeholder="Student ID likhو (1-4)" min="1" />
-  <button onclick="getStudentById()">Result Dekho</button>
-  <div id="result1" class="result-box"></div>
-
-  <hr class="divider">
-
-  <!-- SECTION 2: Naya student add karo -->
-  <h2>2. Naya Student Add Karo</h2>
-  <input type="text"   id="newName"    placeholder="Naam" />
-  <input type="number" id="newMarks"   placeholder="Marks (0-100)" min="0" max="100" />
-  <input type="text"   id="newSubject" placeholder="Subject" />
-  <button onclick="addStudent()">Add Karo</button>
-  <div id="result2" class="result-box"></div>
-
-  <hr class="divider">
-
-  <!-- SECTION 3: Pass list -->
-  <h2>3. Pass List Dekho</h2>
-  <button onclick="getPassList()">Pass List</button>
-  <button onclick="getAllStudents()">Saare Students</button>
-  <div id="result3" class="result-box"></div>
-
-</div>
-
-<script>
-  const API = 'http://localhost:3000'
-
-  // ============================================
-  // fetch() ka poora structure — yaad rakh yeh
-  // ============================================
-  //
-  // fetch(URL, options)
-  //   .then(response) — server se jawab aaya
-  //   .then(data)     — JSON mein convert kiya
-  //   .catch(error)   — kuch galat hua
-  //
-  // async/await wahi cheez hai — zyada readable
-
-  // --- Function 1: ID se student dhundho ---
-  async function getStudentById() {
-    const id = document.getElementById('studentId').value
-    const box = document.getElementById('result1')
-
-    if (!id) {
-      showResult(box, 'error', 'ID likhna zarori hai')
-      return
-    }
-
-    try {
-      // fetch() — GET request (default)
-      const response = await fetch(`${API}/api/students/${id}`)
-      const data = await response.json()
-
-      if (response.status === 404) {
-        showResult(box, 'error', `Student nahi mila (404)\n${data.error}`)
-        return
-      }
-
-      // response.ok — true agar status 200-299 ho
-      if (response.ok) {
-        const s = data.student
-        showResult(box, 'success',
-          `Naam: ${s.name}\n` +
-          `Subject: ${s.subject}\n` +
-          `Marks: ${s.marks}/100\n` +
-          `Grade: ${data.grade}\n` +
-          `Status: ${data.passed ? 'PASS ✅' : 'FAIL ❌'}`
-        )
-      }
-
-    } catch (err) {
-      // yeh tab aata hai jab server hi nahi chala
-      showResult(box, 'error', 'Server se connection nahi — CORS check karo')
-    }
-  }
-
-  // --- Function 2: Naya student add karo ---
-  async function addStudent() {
-    const name    = document.getElementById('newName').value
-    const marks   = parseInt(document.getElementById('newMarks').value)
-    const subject = document.getElementById('newSubject').value
-    const box     = document.getElementById('result2')
-
-    try {
-      // fetch() — POST request — body ke saath
-      const response = await fetch(`${API}/api/students`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'  // batao ke JSON bhej rahe hain
-        },
-        body: JSON.stringify({ name, marks, subject })  // object → string
-      })
-
-      const data = await response.json()
-
-      if (response.status === 400) {
-        showResult(box, 'error', `Galat data (400)\n${data.error}`)
-        return
-      }
-
-      if (response.status === 201) {
-        showResult(box, 'success',
-          `Student add ho gaya! (201 Created)\n` +
-          `Naam: ${data.student.name}\n` +
-          `Grade: ${data.grade}`
-        )
-      }
-
-    } catch (err) {
-      showResult(box, 'error', 'Server se connection nahi')
-    }
-  }
-
-  // --- Function 3: Pass list ---
-  async function getPassList() {
-    const box = document.getElementById('result3')
-    try {
-      const response = await fetch(`${API}/api/pass-list`)
-      const data = await response.json()
-
-      let text = `Total: ${data.summary.total} | Pass: ${data.summary.passed} | Fail: ${data.summary.failed}\n\n`
-      text += 'Passing Students:\n'
-      data.passedStudents.forEach(s => {
-        text += `• ${s.name} — ${s.marks} marks (${s.subject})\n`
-      })
-
-      showResult(box, 'info', text)
-    } catch (err) {
-      showResult(box, 'error', 'Server se connection nahi')
-    }
-  }
-
-  // --- Function 4: Saare students ---
-  async function getAllStudents() {
-    const box = document.getElementById('result3')
-    try {
-      const response = await fetch(`${API}/api/students`)
-      const data = await response.json()
-
-      let text = `Total students: ${data.total}\n\n`
-      data.students.forEach(s => {
-        text += `[${s.id}] ${s.name} — ${s.marks}/100 — ${s.subject}\n`
-      })
-
-      showResult(box, 'info', text)
-    } catch (err) {
-      showResult(box, 'error', 'Server se connection nahi')
-    }
-  }
-
-  // --- Helper: result box dikhao ---
-  function showResult(box, type, message) {
-    box.className = `result-box ${type}`
-    box.innerHTML = `<pre>${message}</pre>`
-    box.style.display = 'block'
-  }
-</script>
 </body>
 </html>
