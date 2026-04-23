@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Result Checker</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial; background: #f5f5f5; padding: 30px; }
+    .container { max-width: 600px; margin: 0 auto; }
+    h1 { color: #003366; margin-bottom: 25px; }
+    h2 { color: #0055A5; margin: 25px 0 15px; }
+    input, select { 
+      width: 100%; padding: 10px; margin: 8px 0; 
+      border: 1px solid #ddd; border-radius: 5px; font-size: 14px;
+    }
+    button { 
+      background: #0055A5; color: white; padding: 12px 25px; 
+      border: none; border-radius: 5px; cursor: pointer; margin: 5px 5px 5px 0;
+    }
+    button:hover { background: #003366; }
+    .result-box { 
+      margin-top: 15px; padding: 15px; border-radius: 5px; 
+      display: none; font-size: 14px; line-height: 1.6;
+    }
+    .success { background: #d4edda; border-left: 4px solid #28a745; }
+    .error   { background: #f8d7da; border-left: 4px solid #dc3545; }
+    .info    { background: #d1ecf1; border-left: 4px solid #17a2b8; }
+    pre { white-space: pre-wrap; font-family: monospace; }
+    .divider { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Student Result Checker</h1>
+
+  <!-- SECTION 1: ID se result dekho -->
+  <h2>1. ID se Result Dekho</h2>
+  <input type="number" id="studentId" placeholder="Student ID likhو (1-4)" min="1" />
+  <button onclick="getStudentById()">Result Dekho</button>
+  <div id="result1" class="result-box"></div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2: Naya student add karo -->
+  <h2>2. Naya Student Add Karo</h2>
+  <input type="text"   id="newName"    placeholder="Naam" />
+  <input type="number" id="newMarks"   placeholder="Marks (0-100)" min="0" max="100" />
+  <input type="text"   id="newSubject" placeholder="Subject" />
+  <button onclick="addStudent()">Add Karo</button>
+  <div id="result2" class="result-box"></div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3: Pass list -->
+  <h2>3. Pass List Dekho</h2>
+  <button onclick="getPassList()">Pass List</button>
+  <button onclick="getAllStudents()">Saare Students</button>
+  <div id="result3" class="result-box"></div>
+
+</div>
+
+<script>
+  const API = 'http://localhost:3000'
+
+  // ============================================
+  // fetch() ka poora structure — yaad rakh yeh
+  // ============================================
+  //
+  // fetch(URL, options)
+  //   .then(response) — server se jawab aaya
+  //   .then(data)     — JSON mein convert kiya
+  //   .catch(error)   — kuch galat hua
+  //
+  // async/await wahi cheez hai — zyada readable
+
+  // --- Function 1: ID se student dhundho ---
+  async function getStudentById() {
+    const id = document.getElementById('studentId').value
+    const box = document.getElementById('result1')
+
+    if (!id) {
+      showResult(box, 'error', 'ID likhna zarori hai')
+      return
+    }
+
+    try {
+      // fetch() — GET request (default)
+      const response = await fetch(`${API}/api/students/${id}`)
+      const data = await response.json()
+
+      if (response.status === 404) {
+        showResult(box, 'error', `Student nahi mila (404)\n${data.error}`)
+        return
+      }
+
+      // response.ok — true agar status 200-299 ho
+      if (response.ok) {
+        const s = data.student
+        showResult(box, 'success',
+          `Naam: ${s.name}\n` +
+          `Subject: ${s.subject}\n` +
+          `Marks: ${s.marks}/100\n` +
+          `Grade: ${data.grade}\n` +
+          `Status: ${data.passed ? 'PASS ✅' : 'FAIL ❌'}`
+        )
+      }
+
+    } catch (err) {
+      // yeh tab aata hai jab server hi nahi chala
+      showResult(box, 'error', 'Server se connection nahi — CORS check karo')
+    }
+  }
+
+  // --- Function 2: Naya student add karo ---
+  async function addStudent() {
+    const name    = document.getElementById('newName').value
+    const marks   = parseInt(document.getElementById('newMarks').value)
+    const subject = document.getElementById('newSubject').value
+    const box     = document.getElementById('result2')
+
+    try {
+      // fetch() — POST request — body ke saath
+      const response = await fetch(`${API}/api/students`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'  // batao ke JSON bhej rahe hain
+        },
+        body: JSON.stringify({ name, marks, subject })  // object → string
+      })
+
+      const data = await response.json()
+
+      if (response.status === 400) {
+        showResult(box, 'error', `Galat data (400)\n${data.error}`)
+        return
+      }
+
+      if (response.status === 201) {
+        showResult(box, 'success',
+          `Student add ho gaya! (201 Created)\n` +
+          `Naam: ${data.student.name}\n` +
+          `Grade: ${data.grade}`
+        )
+      }
+
+    } catch (err) {
+      showResult(box, 'error', 'Server se connection nahi')
+    }
+  }
+
+  // --- Function 3: Pass list ---
+  async function getPassList() {
+    const box = document.getElementById('result3')
+    try {
+      const response = await fetch(`${API}/api/pass-list`)
+      const data = await response.json()
+
+      let text = `Total: ${data.summary.total} | Pass: ${data.summary.passed} | Fail: ${data.summary.failed}\n\n`
+      text += 'Passing Students:\n'
+      data.passedStudents.forEach(s => {
+        text += `• ${s.name} — ${s.marks} marks (${s.subject})\n`
+      })
+
+      showResult(box, 'info', text)
+    } catch (err) {
+      showResult(box, 'error', 'Server se connection nahi')
+    }
+  }
+
+  // --- Function 4: Saare students ---
+  async function getAllStudents() {
+    const box = document.getElementById('result3')
+    try {
+      const response = await fetch(`${API}/api/students`)
+      const data = await response.json()
+
+      let text = `Total students: ${data.total}\n\n`
+      data.students.forEach(s => {
+        text += `[${s.id}] ${s.name} — ${s.marks}/100 — ${s.subject}\n`
+      })
+
+      showResult(box, 'info', text)
+    } catch (err) {
+      showResult(box, 'error', 'Server se connection nahi')
+    }
+  }
+
+  // --- Helper: result box dikhao ---
+  function showResult(box, type, message) {
+    box.className = `result-box ${type}`
+    box.innerHTML = `<pre>${message}</pre>`
+    box.style.display = 'block'
+  }
+</script>
+</body>
+</html>

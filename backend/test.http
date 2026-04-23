@@ -1,0 +1,28 @@
+### Server test
+GET http://localhost:3000/api/hello
+
+###
+
+### Naya lead bhejo
+POST http://localhost:3000/api/leads
+Content-Type: application/json
+
+{
+  "name": "Hafizullah",
+  "email": "hafizullahkhokhar1@gmail.com"
+}
+
+###
+
+### Saare leads dekho
+GET http://localhost:3000/api/leads
+
+###
+
+### Incomplete data bhejo — error dekhne ke liye
+POST http://localhost:3000/api/leads
+Content-Type: application/json
+
+{
+  "name": "Test User"
+}
