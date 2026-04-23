@@ -55,7 +55,7 @@ Backend default URL: http://localhost:3000
 
 Add your screenshot image file in `docs/` folder (example: `docs/studentresultchecker-home.png`) and then use this line:
 
-![Student Result Checker Home](./docs/studentresultchecker-home.png)
+![Student Result Checker Home](./docs/image.png)
 
 ## API Endpoints
 
