@@ -1,28 +1,44 @@
-### Server test
-GET http://localhost:3000/api/hello
+### Saare students dekho
+GET http://localhost:3000/api/students
 
 ###
 
-### Naya lead bhejo
-POST http://localhost:3000/api/leads
+### Subject filter ke saath students dekho
+GET http://localhost:3000/api/students?subject=Python
+
+###
+
+### Ek student ID se dekho
+GET http://localhost:3000/api/students/1
+
+###
+
+### ID jo exist nahi karta — 404 check
+GET http://localhost:3000/api/students/99
+
+###
+
+### Naya student add karo
+POST http://localhost:3000/api/students
 Content-Type: application/json
 
 {
   "name": "Hafizullah",
-  "email": "hafizullahkhokhar1@gmail.com"
+  "marks": 78,
+  "subject": "JavaScript"
 }
 
 ###
 
-### Saare leads dekho
-GET http://localhost:3000/api/leads
-
-###
-
-### Incomplete data bhejo — error dekhne ke liye
-POST http://localhost:3000/api/leads
+### Incomplete data bhejo — 400 error dekhne ke liye
+POST http://localhost:3000/api/students
 Content-Type: application/json
 
 {
   "name": "Test User"
 }
+
+###
+
+### Pass list dekho
+GET http://localhost:3000/api/pass-list
