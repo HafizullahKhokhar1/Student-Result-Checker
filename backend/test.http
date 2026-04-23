@@ -1,28 +1,61 @@
-### Server test
-GET http://localhost:3000/api/hello
+### Health check
+GET http://localhost:3000/api/health
 
 ###
 
-### Naya lead bhejo
-POST http://localhost:3000/api/leads
+### All students
+GET http://localhost:3000/api/students
+
+###
+
+### Filter students (pass + search)
+GET http://localhost:3000/api/students?status=pass&search=ali
+
+###
+
+### One student by id
+GET http://localhost:3000/api/students/1
+
+###
+
+### Create student
+POST http://localhost:3000/api/students
 Content-Type: application/json
 
 {
-  "name": "Hafizullah",
-  "email": "hafizullahkhokhar1@gmail.com"
+  "fullName": "Hafizullah Khokhar",
+  "marks": 78,
+  "subject": "Programming Fundamentals"
 }
 
 ###
 
-### Saare leads dekho
-GET http://localhost:3000/api/leads
-
-###
-
-### Incomplete data bhejo — error dekhne ke liye
-POST http://localhost:3000/api/leads
+### Update student
+PUT http://localhost:3000/api/students/2
 Content-Type: application/json
 
 {
-  "name": "Test User"
+  "fullName": "Sara Khan",
+  "marks": 66,
+  "subject": "Computer Science"
+}
+
+###
+
+### Delete student
+DELETE http://localhost:3000/api/students/4
+
+###
+
+### Dashboard stats
+GET http://localhost:3000/api/stats
+
+###
+
+### Invalid payload test
+POST http://localhost:3000/api/students
+Content-Type: application/json
+
+{
+  "fullName": "A"
 }

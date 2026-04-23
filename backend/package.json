@@ -1,13 +1,20 @@
 {
-  "name": "backend",
+  "name": "student-result-checker-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend API for Student Result Checker",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "echo \"No tests configured yet\""
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "student",
+    "marks",
+    "express",
+    "api"
+  ],
+  "author": "Hafizullah",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

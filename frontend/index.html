@@ -1,6 +1,684 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Marks Checker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3efe7;
+      --panel: #fff9ee;
+      --ink: #18212f;
+      --muted: #5e6878;
+      --primary: #0b6f5f;
+      --primary-dark: #07594c;
+      --accent: #ef6c3f;
+      --good: #1f9d61;
+      --bad: #d64545;
+      --stroke: #d7ccbd;
+      --shadow: 0 20px 40px rgba(20, 32, 50, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Manrope, 'Segoe UI', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(239, 108, 63, 0.22), transparent 30%),
+        radial-gradient(circle at 90% 8%, rgba(11, 111, 95, 0.26), transparent 35%),
+        linear-gradient(180deg, #fdf7ea 0%, #f1ece2 100%);
+      padding: 2rem 1rem 3rem;
+    }
+
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+      animation: rise 520ms ease-out;
+    }
+
+    .hero {
+      border: 1px solid var(--stroke);
+      border-radius: 1.3rem;
+      background: linear-gradient(120deg, #fff7e7 0%, #f9f5ec 100%);
+      box-shadow: var(--shadow);
+      padding: 1.2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .panel {
+      border: 1px solid var(--stroke);
+      background: var(--panel);
+      border-radius: 1rem;
+      box-shadow: var(--shadow);
+      padding: 1rem;
+    }
+
+    .panel h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .api-panel {
+      grid-column: span 12;
+    }
+
+    .stats-panel {
+      grid-column: span 12;
+    }
+
+    .form-panel {
+      grid-column: span 12;
+    }
+
+    .lookup-panel {
+      grid-column: span 12;
+    }
+
+    .table-panel {
+      grid-column: span 12;
+      overflow: hidden;
+    }
+
+    .field-row {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .field {
+      grid-column: span 12;
+      display: flex;
+      flex-direction: column;
+      gap: 0.38rem;
+    }
+
+    .field label {
+      font-size: 0.84rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid #cbbda9;
+      border-radius: 0.75rem;
+      background: #fff;
+      color: var(--ink);
+      padding: 0.68rem 0.78rem;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 160ms ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--primary);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 800;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 120ms ease, opacity 120ms ease, background-color 120ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #ece5d8;
+      color: #2f3948;
+    }
+
+    .btn-danger {
+      background: var(--bad);
+      color: #fff;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.7rem;
+    }
+
+    .stat {
+      border: 1px solid var(--stroke);
+      background: #fff;
+      border-radius: 0.85rem;
+      padding: 0.75rem;
+    }
+
+    .stat .name {
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat .value {
+      margin-top: 0.35rem;
+      font-size: 1.35rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.22rem 0.55rem;
+      letter-spacing: 0.02em;
+    }
+
+    .tag.good {
+      background: rgba(31, 157, 97, 0.12);
+      color: #0f6d3f;
+    }
+
+    .tag.bad {
+      background: rgba(214, 69, 69, 0.14);
+      color: #972626;
+    }
+
+    .status {
+      margin-top: 0.7rem;
+      border-radius: 0.75rem;
+      padding: 0.65rem 0.8rem;
+      font-size: 0.88rem;
+      display: none;
+      border: 1px solid transparent;
+    }
+
+    .status.show {
+      display: block;
+      animation: rise 220ms ease-out;
+    }
+
+    .status.info {
+      color: #113b5f;
+      border-color: #99bbd4;
+      background: #e5f2fb;
+    }
+
+    .status.error {
+      color: #7f1d1d;
+      border-color: #dcb2b2;
+      background: #f9e8e8;
+    }
+
+    .status.success {
+      color: #0e5f38;
+      border-color: #b7dbc7;
+      background: #e7f6ec;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border-radius: 0.8rem;
+      border: 1px solid var(--stroke);
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 0.7rem 0.75rem;
+      border-bottom: 1px solid #efe6d9;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: #f9f6ef;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:hover td {
+      background: #fff8ec;
+    }
+
+    .footer-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.2rem;
+    }
+
+    @media (min-width: 900px) {
+      .stats-panel {
+        grid-column: span 4;
+      }
+
+      .lookup-panel {
+        grid-column: span 8;
+      }
+
+      .form-panel {
+        grid-column: span 5;
+      }
+
+      .table-panel {
+        grid-column: span 7;
+      }
+
+      .field-half {
+        grid-column: span 6;
+      }
+
+      .field-third {
+        grid-column: span 4;
+      }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <h1>Student Marks Checker</h1>
+      <p>Manage student records, calculate grades, and review pass or fail analytics from one dashboard.</p>
+    </header>
+
+    <section class="grid">
+      <article class="panel api-panel">
+        <h2>API Configuration</h2>
+        <div class="field-row">
+          <div class="field field-half">
+            <label for="apiUrl">API Base URL</label>
+            <input id="apiUrl" type="url" placeholder="http://localhost:3000" />
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-primary" id="saveApiUrlBtn" type="button">Save API URL</button>
+          <button class="btn-secondary" id="healthBtn" type="button">Check API Health</button>
+        </div>
+        <div class="status" id="apiStatus"></div>
+      </article>
+
+      <article class="panel stats-panel">
+        <h2>Performance Stats</h2>
+        <div class="stat-grid">
+          <div class="stat"><p class="name">Total</p><p class="value" id="totalStat">0</p></div>
+          <div class="stat"><p class="name">Passed</p><p class="value" id="passedStat">0</p></div>
+          <div class="stat"><p class="name">Failed</p><p class="value" id="failedStat">0</p></div>
+          <div class="stat"><p class="name">Average</p><p class="value" id="averageStat">0</p></div>
+        </div>
+      </article>
+
+      <article class="panel lookup-panel">
+        <h2>Find Students</h2>
+        <div class="field-row">
+          <div class="field field-third">
+            <label for="searchInput">Name or Subject</label>
+            <input id="searchInput" type="text" placeholder="Search by name or subject" />
+          </div>
+          <div class="field field-third">
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="all">All</option>
+              <option value="pass">Pass</option>
+              <option value="fail">Fail</option>
+            </select>
+          </div>
+          <div class="field field-third">
+            <label for="idLookup">Student ID</label>
+            <input id="idLookup" type="number" min="1" placeholder="Enter id" />
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-primary" id="filterBtn" type="button">Apply Filters</button>
+          <button class="btn-secondary" id="lookupBtn" type="button">Find by ID</button>
+          <button class="btn-secondary" id="refreshBtn" type="button">Refresh All</button>
+        </div>
+        <div class="status" id="lookupStatus"></div>
+      </article>
+
+      <article class="panel form-panel">
+        <h2>Add Student</h2>
+        <div class="field-row">
+          <div class="field">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" type="text" placeholder="e.g. Hafizullah Khokhar" />
+          </div>
+          <div class="field field-half">
+            <label for="subject">Subject</label>
+            <input id="subject" type="text" placeholder="e.g. Computer Science" />
+          </div>
+          <div class="field field-half">
+            <label for="marks">Marks</label>
+            <input id="marks" type="number" min="0" max="100" placeholder="0 - 100" />
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-primary" id="createBtn" type="button">Add Student</button>
+        </div>
+        <div class="status" id="formStatus"></div>
+      </article>
+
+      <article class="panel table-panel">
+        <h2>Student Records</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody"></tbody>
+          </table>
+        </div>
+        <div class="status" id="tableStatus"></div>
+      </article>
+    </section>
+
+    <p class="footer-note">Tip: for GitHub Pages, deploy backend on Render and set the API URL above.</p>
+  </main>
+
+  <script>
+    const API_STORAGE_KEY = 'student-checker-api-url';
+    const DEFAULT_API_URL = 'http://localhost:3000';
+
+    const apiUrlInput = document.getElementById('apiUrl');
+    const apiStatus = document.getElementById('apiStatus');
+    const formStatus = document.getElementById('formStatus');
+    const lookupStatus = document.getElementById('lookupStatus');
+    const tableStatus = document.getElementById('tableStatus');
+
+    const totalStat = document.getElementById('totalStat');
+    const passedStat = document.getElementById('passedStat');
+    const failedStat = document.getElementById('failedStat');
+    const averageStat = document.getElementById('averageStat');
+
+    const studentsTableBody = document.getElementById('studentsTableBody');
+
+    function getApiBaseUrl() {
+      return (localStorage.getItem(API_STORAGE_KEY) || DEFAULT_API_URL).trim();
+    }
+
+    function setStatus(element, type, message) {
+      element.className = `status ${type} show`;
+      element.textContent = message;
+    }
+
+    function clearStatus(element) {
+      element.className = 'status';
+      element.textContent = '';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    async function apiRequest(path, options = {}) {
+      const baseUrl = getApiBaseUrl();
+      const response = await fetch(`${baseUrl}${path}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(options.headers || {})
+        },
+        ...options
+      });
+
+      let payload = null;
+      try {
+        payload = await response.json();
+      } catch (error) {
+        payload = { success: false, error: 'Invalid JSON response from API.' };
+      }
+
+      if (!response.ok) {
+        const message = payload.errors?.join(' | ') || payload.error || `Request failed with status ${response.status}`;
+        throw new Error(message);
+      }
+
+      return payload;
+    }
+
+    function studentRowMarkup(student) {
+      const statusClass = student.passed ? 'good' : 'bad';
+      const statusText = student.passed ? 'Pass' : 'Fail';
+      return `
+        <tr>
+          <td>${student.id}</td>
+          <td>${escapeHtml(student.fullName)}</td>
+          <td>${escapeHtml(student.subject)}</td>
+          <td>${student.marks}</td>
+          <td>${student.grade}</td>
+          <td><span class="tag ${statusClass}">${statusText}</span></td>
+          <td>
+            <button class="btn-danger" type="button" onclick="deleteStudent(${student.id})">Delete</button>
+          </td>
+        </tr>
+      `;
+    }
+
+    function updateStats(stats) {
+      totalStat.textContent = stats.total;
+      passedStat.textContent = stats.passed;
+      failedStat.textContent = stats.failed;
+      averageStat.textContent = stats.averageMarks;
+    }
+
+    async function loadStats() {
+      const payload = await apiRequest('/api/stats');
+      updateStats(payload.data);
+    }
+
+    async function loadStudents(query = '') {
+      const payload = await apiRequest(`/api/students${query}`);
+      const rows = payload.data.map(studentRowMarkup).join('');
+      studentsTableBody.innerHTML = rows || '<tr><td colspan="7">No students found.</td></tr>';
+      setStatus(tableStatus, 'info', `${payload.total} student record(s) loaded.`);
+    }
+
+    async function runHealthCheck() {
+      clearStatus(apiStatus);
+      try {
+        const payload = await apiRequest('/api/health');
+        setStatus(apiStatus, 'success', payload.message);
+      } catch (error) {
+        setStatus(apiStatus, 'error', error.message);
+      }
+    }
+
+    async function createStudent() {
+      clearStatus(formStatus);
+      const fullName = document.getElementById('fullName').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const marksValue = document.getElementById('marks').value;
+      const marks = Number(marksValue);
+
+      try {
+        await apiRequest('/api/students', {
+          method: 'POST',
+          body: JSON.stringify({ fullName, subject, marks })
+        });
+
+        setStatus(formStatus, 'success', 'Student added successfully.');
+        document.getElementById('fullName').value = '';
+        document.getElementById('subject').value = '';
+        document.getElementById('marks').value = '';
+
+        await Promise.all([loadStudents(), loadStats()]);
+      } catch (error) {
+        setStatus(formStatus, 'error', error.message);
+      }
+    }
+
+    async function applyFilters() {
+      clearStatus(lookupStatus);
+      const search = document.getElementById('searchInput').value.trim();
+      const status = document.getElementById('statusFilter').value;
+
+      const params = new URLSearchParams();
+      if (search) params.set('search', search);
+      if (status !== 'all') params.set('status', status);
+
+      const query = params.toString() ? `?${params.toString()}` : '';
+
+      try {
+        await loadStudents(query);
+        setStatus(lookupStatus, 'success', 'Filters applied successfully.');
+      } catch (error) {
+        setStatus(lookupStatus, 'error', error.message);
+      }
+    }
+
+    async function lookupById() {
+      clearStatus(lookupStatus);
+      const id = Number(document.getElementById('idLookup').value);
+
+      if (!Number.isInteger(id) || id <= 0) {
+        setStatus(lookupStatus, 'error', 'Please enter a valid positive student id.');
+        return;
+      }
+
+      try {
+        const payload = await apiRequest(`/api/students/${id}`);
+        studentsTableBody.innerHTML = studentRowMarkup(payload.data);
+        setStatus(lookupStatus, 'success', `Student ${payload.data.fullName} loaded.`);
+      } catch (error) {
+        setStatus(lookupStatus, 'error', error.message);
+      }
+    }
+
+    async function refreshDashboard() {
+      clearStatus(lookupStatus);
+      clearStatus(tableStatus);
+      try {
+        await Promise.all([loadStudents(), loadStats()]);
+        setStatus(lookupStatus, 'success', 'Dashboard refreshed.');
+      } catch (error) {
+        setStatus(lookupStatus, 'error', error.message);
+      }
+    }
+
+    async function deleteStudent(id) {
+      try {
+        await apiRequest(`/api/students/${id}`, { method: 'DELETE' });
+        await Promise.all([loadStudents(), loadStats()]);
+        setStatus(tableStatus, 'success', `Student ${id} deleted.`);
+      } catch (error) {
+        setStatus(tableStatus, 'error', error.message);
+      }
+    }
+
+    function saveApiUrl() {
+      const value = apiUrlInput.value.trim();
+      if (!value) {
+        setStatus(apiStatus, 'error', 'API URL cannot be empty.');
+        return;
+      }
+
+      localStorage.setItem(API_STORAGE_KEY, value);
+      setStatus(apiStatus, 'success', 'API URL saved.');
+    }
+
+    document.getElementById('saveApiUrlBtn').addEventListener('click', saveApiUrl);
+    document.getElementById('healthBtn').addEventListener('click', runHealthCheck);
+    document.getElementById('createBtn').addEventListener('click', createStudent);
+    document.getElementById('filterBtn').addEventListener('click', applyFilters);
+    document.getElementById('lookupBtn').addEventListener('click', lookupById);
+    document.getElementById('refreshBtn').addEventListener('click', refreshDashboard);
+
+    apiUrlInput.value = getApiBaseUrl();
+    refreshDashboard();
+
+    window.deleteStudent = deleteStudent;
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <title>Student Result Checker</title>
   <style>
