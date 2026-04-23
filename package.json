@@ -1,0 +1,14 @@
+{
+  "name": "student-result-checker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack Student Result Checker for Vercel deployment",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}
