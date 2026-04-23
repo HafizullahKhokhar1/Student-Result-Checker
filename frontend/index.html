@@ -311,24 +311,8 @@
     </header>
 
     <section class="grid">
-      <article class="panel">
-        <h2>1) Connect Backend API</h2>
-        <p class="hint">First set your backend URL, then click health check.</p>
-        <div class="row">
-          <div class="field half">
-            <label for="apiUrl">API Base URL</label>
-            <input id="apiUrl" type="url" placeholder="https://your-backend-url.com" />
-          </div>
-        </div>
-        <div class="actions">
-          <button class="primary" id="saveApiUrlBtn" type="button">Save API URL</button>
-          <button class="secondary" id="healthBtn" type="button">Check API Health</button>
-        </div>
-        <div class="status" id="apiStatus"></div>
-      </article>
-
       <article class="panel left">
-        <h2>2) Stats</h2>
+        <h2>1) Stats</h2>
         <div class="stats">
           <div class="stat"><p class="stat-name">Total</p><p class="stat-value" id="totalStat">0</p></div>
           <div class="stat"><p class="stat-name">Passed</p><p class="stat-value" id="passedStat">0</p></div>
@@ -338,7 +322,7 @@
       </article>
 
       <article class="panel right">
-        <h2>3) Find Students</h2>
+        <h2>2) Find Students</h2>
         <div class="row">
           <div class="field third">
             <label for="searchInput">Search</label>
@@ -366,7 +350,7 @@
       </article>
 
       <article class="panel left">
-        <h2>4) Add Student</h2>
+        <h2>3) Add Student</h2>
         <p class="hint">Enter details and click Add Student.</p>
         <div class="row">
           <div class="field">
@@ -389,7 +373,7 @@
       </article>
 
       <article class="panel right">
-        <h2>5) Student Records</h2>
+        <h2>4) Student Records</h2>
         <div class="table-box">
           <table>
             <thead>
@@ -410,16 +394,11 @@
       </article>
     </section>
 
-    <p class="footer-note">Tip: set your backend URL once, then dashboard will remember it.</p>
+    <p class="footer-note">Tip: frontend and backend run together on the same Vercel domain.</p>
     <p class="developer">Developed by Hafzullah Khokhar</p>
   </main>
 
   <script>
-    const API_STORAGE_KEY = 'student-checker-api-url';
-    const DEFAULT_API_URL = 'http://localhost:3000';
-
-    const apiUrlInput = document.getElementById('apiUrl');
-    const apiStatus = document.getElementById('apiStatus');
     const formStatus = document.getElementById('formStatus');
     const lookupStatus = document.getElementById('lookupStatus');
     const tableStatus = document.getElementById('tableStatus');
@@ -429,10 +408,6 @@
     const failedStat = document.getElementById('failedStat');
     const averageStat = document.getElementById('averageStat');
     const studentsTableBody = document.getElementById('studentsTableBody');
-
-    function getApiBaseUrl() {
-      return (localStorage.getItem(API_STORAGE_KEY) || DEFAULT_API_URL).trim();
-    }
 
     function setStatus(element, type, message) {
       element.className = `status ${type} show`;
@@ -454,7 +429,7 @@
     }
 
     async function apiRequest(path, options = {}) {
-      const response = await fetch(`${getApiBaseUrl()}${path}`, {
+      const response = await fetch(path, {
         headers: {
           'Content-Type': 'application/json',
           ...(options.headers || {})
@@ -511,16 +486,6 @@
       const rows = payload.data.map(studentRow).join('');
       studentsTableBody.innerHTML = rows || '<tr><td colspan="7">No students found.</td></tr>';
       setStatus(tableStatus, 'info', `${payload.total} students loaded.`);
-    }
-
-    async function runHealthCheck() {
-      clearStatus(apiStatus);
-      try {
-        const payload = await apiRequest('/api/health');
-        setStatus(apiStatus, 'success', payload.message);
-      } catch (error) {
-        setStatus(apiStatus, 'error', error.message);
-      }
     }
 
     async function createStudent() {
@@ -605,25 +570,11 @@
       }
     }
 
-    function saveApiUrl() {
-      const value = apiUrlInput.value.trim();
-      if (!value) {
-        setStatus(apiStatus, 'error', 'API URL cannot be empty.');
-        return;
-      }
-
-      localStorage.setItem(API_STORAGE_KEY, value);
-      setStatus(apiStatus, 'success', 'API URL saved.');
-    }
-
-    document.getElementById('saveApiUrlBtn').addEventListener('click', saveApiUrl);
-    document.getElementById('healthBtn').addEventListener('click', runHealthCheck);
     document.getElementById('createBtn').addEventListener('click', createStudent);
     document.getElementById('filterBtn').addEventListener('click', applyFilters);
     document.getElementById('lookupBtn').addEventListener('click', lookupById);
     document.getElementById('refreshBtn').addEventListener('click', refreshAll);
 
-    apiUrlInput.value = getApiBaseUrl();
     refreshAll();
 
     window.deleteStudent = deleteStudent;

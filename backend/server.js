@@ -284,6 +284,10 @@ app.use((err, req, res, next) => {
   })
 })
 
-app.listen(PORT, () => {
-  console.log(`Student Result Checker API running on port ${PORT}`)
-})
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Student Result Checker API running on port ${PORT}`)
+  })
+}
+
+module.exports = app
