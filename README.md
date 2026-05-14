@@ -1,81 +1,89 @@
 # Student Result Checker
 
-A complete student marks checker website with:
+A clean full-stack student result management app focused on practical backend API design and a simple, responsive UI.
 
-- A structured Express backend API
-- A responsive frontend dashboard
-- Student CRUD and filtering
-- Stats summary with grades and pass or fail status
+## Highlights
 
-## Features
+- Full CRUD workflow for student records
+- Pass/fail and grade-aware result handling
+- Search and filter support for faster data lookup
+- Stats endpoint for analytics-ready summaries
+- Vercel-ready deployment setup for frontend + API
 
-- Add student with full name, subject, and marks
-- View all students in a table
-- Filter by pass or fail status and search by name or subject
-- Lookup one student by ID
-- Delete student records
-- Health and analytics endpoints
+## Live Demo
+
+- **Production:** https://studentresultchecker.vercel.app
 
 ## Tech Stack
 
-- Backend: Node.js, Express, CORS
-- Frontend: HTML, CSS, vanilla JavaScript
+- **Backend:** Node.js, Express, CORS
+- **Frontend:** HTML, CSS, Vanilla JavaScript
+- **Deployment:** Vercel
 
 ## Project Structure
 
-- api/index.js
-- backend/server.js
-- backend/package.json
-- backend/test.http
-- frontend/index.html
-- vercel.json
+```text
+api/
+  [...all].js
+  index.js
+backend/
+  server.js
+  package.json
+  test.http
+frontend/
+  index.html
+docs/
+  image.png
+vercel.json
+```
 
-## Run Locally
+## Core Features
 
-1. Go to project root folder.
-2. Install dependencies.
-3. Start backend.
-4. Open frontend/index.html in browser or serve it with Live Server.
-
-Commands:
-
-PowerShell
-
-cd learn-api-project
-npm install
-npm run start
-
-Backend default URL: http://localhost:3000
-
-## Live Website
-
-- Production URL: https://studentresultchecker.vercel.app
-
-## App Screenshot
-
-Add your screenshot image file in `docs/` folder (example: `docs/studentresultchecker-home.png`) and then use this line:
-
-![Student Result Checker Home](./docs/image.png)
+- Add student records (name, subject, marks)
+- View all students in a table
+- Search by student name or subject
+- Filter by pass/fail status
+- View individual student by ID
+- Update and delete student records
+- Health and stats endpoints for monitoring
 
 ## API Endpoints
 
-- GET /api/health
-- GET /api/stats
-- GET /api/students
-- GET /api/students/:id
-- POST /api/students
-- PUT /api/students/:id
-- DELETE /api/students/:id
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/api/health` | Service health check |
+| GET | `/api/stats` | Student result analytics |
+| GET | `/api/students` | List students |
+| GET | `/api/students/:id` | Get student by ID |
+| POST | `/api/students` | Create student |
+| PUT | `/api/students/:id` | Update student |
+| DELETE | `/api/students/:id` | Delete student |
 
-## Deployment Plan (Vercel Full Stack)
+## Run Locally
 
-This project is configured to deploy frontend and backend together on one Vercel domain.
+```bash
+cd /home/runner/work/Student-Result-Checker/Student-Result-Checker
+npm install
+npm run start
+```
 
-1. Import GitHub repo: `HafizullahKhokhar1/Student-Result-Checker`
+Backend runs at: `http://localhost:3000`
+
+Then open `frontend/index.html` in your browser (or use Live Server).
+
+## Screenshot
+
+![Student Result Checker Home](./docs/image.png)
+
+## Deployment (Vercel)
+
+This repo is already configured to deploy frontend and backend together on one Vercel domain.
+
+1. Import repository: `HafizullahKhokhar1/Student-Result-Checker`
 2. Branch: `main`
 3. Framework Preset: `Other`
 4. Root Directory: `./`
-5. Install Command: leave default (`npm install`)
+5. Install Command: default (`npm install`)
 6. Build Command: leave empty
 7. Output Directory: leave empty
 8. Deploy
@@ -87,5 +95,5 @@ After deployment, verify:
 
 ## Notes
 
-- Current data is stored in memory and resets on server restart.
-- You can later connect MongoDB or PostgreSQL for persistent data.
+- Data is currently stored in memory (resets when server restarts).
+- For persistence, you can connect MongoDB or PostgreSQL next.
