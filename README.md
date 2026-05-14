@@ -62,7 +62,7 @@ vercel.json
 ## Run Locally
 
 ```bash
-cd /home/runner/work/Student-Result-Checker/Student-Result-Checker
+cd Student-Result-Checker
 npm install
 npm run start
 ```
